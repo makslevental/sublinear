@@ -65,3 +65,4 @@ class Graph(object):
                           for v in ptr.children if v.visited is not True])
 
         return vert_order
+
