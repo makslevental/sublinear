@@ -1,9 +1,4 @@
-from itertools import product
-import random
 from collections import deque
-
-DEBUG = True
-
 
 class GraphError(Exception):
     def __init__(self, value):
@@ -55,18 +50,18 @@ class Graph(object):
     def bfs(self, root:Vertex=None):
         ptr = root if root is not None else self.vertices[0]
 
+        vert_order = []
         ptr.distance = 0
         q = deque([ptr])
+
         while len(q) > 0:
             ptr = q.popleft()
-            q.extend([v.set(parent=ptr, distance=ptr.distance+1)
-                      for v in ptr.children if v.visited is not True])
-            ptr.visited = True
-            
-            if DEBUG: print(ptr)
+            if ptr.visited:
+                continue
+            else:
+                vert_order.append(ptr)
+                ptr.visited = True
+                q.extend([v.set(parent=ptr, distance=ptr.distance+1)
+                          for v in ptr.children if v.visited is not True])
 
-if __name__ == '__main__':
-    vertices = list(range(0, 100))
-    edges = random.sample(list(product(vertices, vertices)), 500)
-    g = Graph(vertices, edges)
-    g.bfs()
+        return vert_order
