@@ -1,10 +1,11 @@
 from collections import deque
 
+
 class GraphError(Exception):
     def __init__(self, value):
         self.value = value
 
-    def __str(self):
+    def __str__(self):
         return repr(self.value)
 
 
@@ -38,16 +39,16 @@ class Vertex(object):
 
 
 class Graph(object):
-    def __init__(self, vertices:list, edges:[tuple]) -> None:
+    def __init__(self, vertices: list, edges: [tuple]) -> None:
         self.vertices = len(vertices)*[None]
-        for i,v in enumerate(vertices):
+        for i, v in enumerate(vertices):
             self.vertices[i] = Vertex(name=str(v))
         # edges are directed. undirected graphs will be represented by double edges
         self.edges = edges
         for e in self.edges:
             self.vertices[e[0]].children.append(self.vertices[e[1]])
 
-    def bfs(self, root:Vertex=None):
+    def bfs(self, root: Vertex=None):
         ptr = root if root is not None else self.vertices[0]
 
         vert_order = []
@@ -63,6 +64,4 @@ class Graph(object):
                 ptr.visited = True
                 q.extend([v.set(parent=ptr, distance=ptr.distance+1)
                           for v in ptr.children if v.visited is not True])
-
         return vert_order
-
