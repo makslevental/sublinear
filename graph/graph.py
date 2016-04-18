@@ -53,15 +53,15 @@ class Graph(object):
 
         vert_order = []
         ptr.distance = 0
-        q = deque([ptr])
+        que = deque([ptr])
 
-        while len(q) > 0:
-            ptr = q.popleft()
+        while que:
+            ptr = que.popleft()
             if ptr.visited:
                 continue
             else:
                 vert_order.append(ptr)
                 ptr.visited = True
-                q.extend([v.set(parent=ptr, distance=ptr.distance+1)
+                que.extend([v.set(parent=ptr, distance=ptr.distance+1)
                           for v in ptr.children if v.visited is not True])
         return vert_order
