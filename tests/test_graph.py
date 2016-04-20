@@ -28,7 +28,7 @@ class GraphTest(unittest.TestCase):
             est = g.avg_deg(err, 1)
 
             prob_correct.append((1-err)*(connectivity+1) <= est <= (1+err)*(connectivity+1))
-        print(sum(map(int,prob_correct))/len(prob_correct))
+        # print(sum(map(int,prob_correct))/len(prob_correct))
         self.assertGreaterEqual(sum(map(int,prob_correct))/len(prob_correct),.6)
 
 

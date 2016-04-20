@@ -3,6 +3,7 @@ from math import ceil, log, sqrt
 import random
 from intervaltree import IntervalTree
 
+
 class GraphError(Exception):
     def __init__(self, value):
         self.value = value
