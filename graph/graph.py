@@ -1,6 +1,7 @@
 from collections import deque, Counter
 from math import ceil, log, sqrt
 import random
+from intervaltree import IntervalTree
 
 class GraphError(Exception):
     def __init__(self, value):
@@ -78,9 +79,13 @@ class Graph(object):
         num_b = ceil(log(num_v,1+beta))+1
         samp_i = num_b*[None]
         for i in range(num_b):
-            samp_i[i] = [(v, ((1+beta)**(i-1),(1+beta)**i)) for v in samp.items() if (1+beta)**(i-1) < v[0].deg() <= (1+beta)**i]
+            samp_i[i] = [((v,count), ((1+beta)**(i-1),(1+beta)**i)) for v,count in samp.items()
+                         if (1+beta)**(i-1) < v.deg() <= (1+beta)**i]
 
         lg_bins = list(filter(lambda s: sum([ss[0][1] for ss in s])/samp_sz >= (1/num_b)*sqrt((err/6)*(l_bound/num_v)), samp_i))
+
+        sml_bins = IntervalTree.from_tuples([bin[0][1] for bin in lg_bins])
+
 
         alpha_i = []
         for b in lg_bins:
@@ -88,8 +93,8 @@ class Graph(object):
             for (v,count),_ in b:
                 for i in range(count):
                     nei = random.choice(v.children)
-                    # if nei is not in a large bin then xi(v) = 1
-                    if any([interval[0] < nei.deg() <= interval[1] for interval in [bin[0][1] for bin in lg_bins]]):
+                    # if nei is not in a large bin then xi(v) = 1, ie if nei is in a "small" bucket
+                    if len(sml_bins.search(nei.deg())) == 0:
                         alpha += 1
                     # if nei is in a large bin then xi(v) = 0
             alpha_i.append(alpha/sum([count for (_, count), _ in b]))
