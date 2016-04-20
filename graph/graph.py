@@ -1,5 +1,6 @@
-from collections import deque
-
+from collections import deque, Counter
+from math import ceil, log, sqrt
+import random
 
 class GraphError(Exception):
     def __init__(self, value):
@@ -65,3 +66,33 @@ class Graph(object):
                 que.extend([v.set(parent=ptr, distance=ptr.distance+1)
                           for v in ptr.children if v.visited is not True])
         return vert_order
+
+    def avg_deg(self, err: float, l_bound: int) -> float:
+        beta = err/8
+        num_v = len(self.vertices)
+        samp_sz = ceil( (sqrt(num_v/l_bound)) * (err**(-4.5)) * ((log(num_v))**2) * (log(1/err)) )
+        samp = Counter()
+        for i in range(samp_sz):
+            samp[random.choice(self.vertices)] += 1
+
+        num_b = ceil(log(num_v,1+beta))+1
+        samp_i = num_b*[None]
+        for i in range(num_b):
+            samp_i[i] = [(v, ((1+beta)**(i-1),(1+beta)**i)) for v in samp.items() if (1+beta)**(i-1) < v[0].deg() <= (1+beta)**i]
+
+        lg_bins = list(filter(lambda s: sum([ss[0][1] for ss in s])/samp_sz >= (1/num_b)*sqrt((err/6)*(l_bound/num_v)), samp_i))
+
+        alpha_i = []
+        for b in lg_bins:
+            alpha = 0
+            for (v,count),_ in b:
+                for i in range(count):
+                    nei = random.choice(v.children)
+                    # if nei is not in a large bin then xi(v) = 1
+                    if any([interval[0] < nei.deg() <= interval[1] for interval in [bin[0][1] for bin in lg_bins]]):
+                        alpha += 1
+                    # if nei is in a large bin then xi(v) = 0
+            alpha_i.append(alpha/sum([count for (_, count), _ in b]))
+
+        return (1/samp_sz)*sum([(1+alpha_i[i])*sum([count for (_, count), _ in lg_bins[i]])*lg_bins[i][0][1][1] for i in range(len(lg_bins))])
+
