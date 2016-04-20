@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ice109/sublinear.svg?branch=master)](https://travis-ci.org/ice109/sublinear)
+[![Build Status](https://travis-ci.org/makslevental/sublinear.svg?branch=master)](https://travis-ci.org/makslevental/sublinear)
 
 # sublinear
 Sublinear algorithms for graph parameters
