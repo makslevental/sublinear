@@ -17,9 +17,21 @@ class GraphTest(unittest.TestCase):
         num_v = 10
         connectivity = 3
         prob_correct = []
+
+
         for i in range(100):
             vertices = list(range(0, num_v))
-            edges = random.sample(list(product(vertices, vertices)), connectivity*num_v)
+            edges = []
+            # reservoir sampling to construct edge list because loading product
+            # is too memory intensive
+            for i,e in enumerate(product(vertices, vertices)):
+                if i < connectivity*num_v:
+                    edges.append(e)
+                else:
+                    j = random.randint(0,i)
+                    if j < connectivity*num_v:
+                        edges[j] = e
+            # edges = random.sample(product(vertices, vertices), connectivity*num_v)
             # enforce minimum degree 1
             for i in range(num_v):
                 edges.append((i, random.choice(range(num_v))))
