@@ -1,3 +1,4 @@
+from __future__ import division
 from collections import deque, Counter
 from math import ceil, log, sqrt
 import random
@@ -13,7 +14,7 @@ class GraphError(Exception):
 
 
 class Vertex(object):
-    def __init__(self, name: str, value=None, children: list=None, parent: 'Vertex'=None) -> None:
+    def __init__(self, name, value=None, children=None, parent=None):
         if name is not None:
             self.name = name
         else:
@@ -42,7 +43,7 @@ class Vertex(object):
 
 
 class Graph(object):
-    def __init__(self, vertices: list, edges: [tuple]) -> None:
+    def __init__(self, vertices, edges) :
         self.vertices = len(vertices)*[None]
         for i, v in enumerate(vertices):
             self.vertices[i] = Vertex(name=str(v))
@@ -51,7 +52,7 @@ class Graph(object):
         for e in self.edges:
             self.vertices[e[0]].children.append(self.vertices[e[1]])
 
-    def bfs(self, root: Vertex=None):
+    def bfs(self, root=None):
         ptr = root if root is not None else self.vertices[0]
 
         vert_order = []
@@ -69,21 +70,21 @@ class Graph(object):
                           for v in ptr.children if v.visited is not True])
         return vert_order
 
-    def avg_deg(self, err: float, l_bound: int) -> float:
+    def avg_deg(self, err, l_bound):
         beta = err/8
         num_v = len(self.vertices)
-        samp_sz = ceil( (sqrt(num_v/l_bound)) * (err**(-4.5)) * ((log(num_v))**2) * (log(1/err)) )
+        samp_sz = int(ceil( (sqrt(num_v/l_bound)) * (err**(-4.5)) * ((log(num_v))**2) * (log(1/err)) ))
         samp = Counter()
         for i in range(samp_sz):
             samp[random.choice(self.vertices)] += 1
 
-        num_b = ceil(log(num_v,1+beta))+1
+        num_b = int(ceil(log(num_v,1+beta))+1)
         samp_i = num_b*[None]
         for i in range(num_b):
             samp_i[i] = [((v,count), ((1+beta)**(i-1),(1+beta)**i)) for v,count in samp.items()
                          if (1+beta)**(i-1) < v.deg() <= (1+beta)**i]
 
-        lg_bins = list(filter(lambda s: sum([ss[0][1] for ss in s])/samp_sz >= (1/num_b)*sqrt((err/6)*(l_bound/num_v)), samp_i))
+        lg_bins = list(filter(lambda s: sum([ss[0][1] for ss in s])/samp_sz >= (1./num_b)*sqrt((err/6.)*(l_bound/num_v)), samp_i))
 
         sml_bins = IntervalTree.from_tuples([bin[0][1] for bin in lg_bins])
 
