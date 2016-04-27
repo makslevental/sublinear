@@ -1,0 +1,6 @@
+{
+  "name": "Sublinear",
+  "tagline": "Sublinear algorithms for graph parameters",
+  "body": "[![Build Status](https://travis-ci.org/makslevental/sublinear.svg?branch=master)](https://travis-ci.org/makslevental/sublinear)\r\n\r\n# sublinear\r\nSublinear algorithms for graph parameters\r\n\r\n# video\r\n\r\nhttps://www.youtube.com/watch?v=_kos3_LVpJI\r\n\r\n# notes\r\n\r\nThese are roughtly in inverse order of detailed/complete:\r\n\r\nhttp://www.wisdom.weizmann.ac.il/~oded/PS/aver-gr2.ps\r\n\r\nhttp://www.wisdom.weizmann.ac.il/~oded/p_aver-graph.html\r\n\r\nhttp://www.eng.tau.ac.il/~danar/Public-pdf/avg.pdf\r\n\r\nhttp://www.cs.princeton.edu/courses/archive/spr04/cos598B/bib/GoldreichR-aveDegree.pdf\r\n\r\nhttp://www.wisdom.weizmann.ac.il/~oded/PTW/sublin.pdf\r\n\r\nhttp://tce.technion.ac.il/wp-content/uploads/sites/8/2015/04/DanaRonSlides.pdf\r\n\r\nhttps://github.com/ice109/clrs/blob/master/ch22/sublinear.pdf\r\n\r\n\r\n\r\n\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
